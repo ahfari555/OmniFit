@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" class="light scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniFit - 2026 US Health, TDEE, Macro & Fitness Calculator Suite</title>
+  <meta name="description" content="100% free US health calculator suite. Estimate your TDEE, Macros, BMI, Body Fat, BMR, Pregnancy Due Date, and optimal Sleep Cycles instantly.">
+  <meta name="keywords" content="tdee calculator, macro calculator for weight loss, body fat calculator, us navy body fat, bmi calculator, pregnancy due date calculator, sleep cycle calculator">
+  <meta name="author" content="OmniFit Enterprise">
+  <link rel="canonical" href="https://omni-fit.vercel.app/">
+  <meta name="google-site-verification" content="google45274bc7d9133ca5" />
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="OmniFit - 2026 Ultimate Health & Fitness Calculator">
+  <meta property="og:description" content="Access 10 advanced health calculation tools with visual charts for optimal fitness tracking.">
+  <meta property="og:url" content="https://omni-fit.vercel.app/">
+  <meta property="og:type" content="website">
+
+  <!-- Massive JSON-LD Schema for SEO Rich Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "OmniFit Suite",
+        "url": "https://omni-fit.vercel.app/",
+        "description": "Comprehensive suite of 10 US health and fitness calculators.",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "All"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is TDEE and why does it matter?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "TDEE stands for Total Daily Energy Expenditure. It is the total number of calories you burn in a day, including basal metabolic rate and physical activity. Knowing your TDEE is essential for weight loss or muscle gain."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How are Macros calculated for weight loss?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Macros (macronutrients) are divided into Protein, Fat, and Carbohydrates. A common weight loss split is 40% protein, 30% fat, and 30% carbs, based on a caloric deficit (eating fewer calories than your TDEE)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How accurate is the US Navy Body Fat calculator?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The US Navy method uses waist, neck, and height measurements. It is considered accurate within 3-4% of DEXA scans, making it an excellent at-home estimation tool for tracking fitness progress."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2805918301542012" crossorigin="anonymous"></script>
+
+  <!-- Chart.js for Data Visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Fonts & Tailwind CSS -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } }
+    }
+  </script>
+  <style>
+    body { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%); transition: background-color 0.3s ease; }
+    html.dark body { background: linear-gradient(135deg, #09090b 0%, #0f172a 50%, #1e1b4b 100%); color: #f8fafc; }
+    .pastel-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08); transition: all 0.3s ease; }
+    html.dark .pastel-card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
+    .gradient-text { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    html.dark .gradient-text { background: linear-gradient(135deg, #f472b6 100%, #a78bfa 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .custom-scrollbar::-webkit-scrollbar { height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(236, 72, 153, 0.5); border-radius: 10px; }
+    
+    .hero-glow {
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(139,92,246,0.05) 70%, transparent 100%);
+      z-index: 0;
+      pointer-events: none;
+      border-radius: 50%;
+    }
+    .stat-badge {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(236, 72, 153, 0.2);
+    }
+    html.dark .stat-badge {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+    }
+    @keyframes pulse-slow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+    .animate-pulse-slow { animation: pulse-slow 4s infinite ease-in-out; }
+    @media print {
+      body { background: white; color: black; }
+      header, .no-print, #seo-section, #faq-section, #matrix-section, footer { display: none !important; }
+      #printArea { display: block !important; width: 100%; box-shadow: none; border: none; padding: 0; }
+      .pastel-card { border: 1px solid #ccc; box-shadow: none; }
+    }
+  </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col antialiased text-slate-800 dark:text-slate-100">
+
+  <!-- TOP NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/70 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-4 no-print">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center font-black text-xl text-white shadow-md">🩺</div>
+        <span class="text-xl font-extrabold tracking-tight text-slate-800 dark:text-white">Omni<span class="gradient-text">Fit</span></span>
+      </a>
+      <div class="flex items-center gap-4">
+        <span class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-pink-50 dark:bg-pink-950 text-pink-600 dark:text-pink-400 border border-pink-100 dark:border-pink-900">
+          <span class="w-2 h-2 rounded-full bg-pink-600 animate-pulse"></span> 10 Pro Health Tools Active
+        </span>
+        <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Toggle Dark Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION WITH CUSTOM SVG HEALTH ILLUSTRATION & STAT CARDS -->
+  <div class="hero-glow top-20 left-1/2 -translate-x-1/2"></div>
+  <section class="max-w-7xl mx-auto px-6 pt-10 pb-6 text-center relative z-10 no-print">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-extrabold bg-pink-50 dark:bg-pink-950/80 text-pink-600 dark:text-pink-400 border border-pink-200 dark:border-pink-900 mb-6 shadow-sm">
+      <svg class="w-4 h-4 animate-spin text-pink-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+      US Premium Body Intelligence & Bio-Metrics Suite
+    </div>
+
+    <!-- CUSTOM SVG HEALTH ILLUSTRATION -->
+    <div class="max-w-md mx-auto mb-6 animate-pulse-slow">
+      <svg viewBox="0 0 500 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-xl">
+        <defs>
+          <linearGradient id="illGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ec4899" />
+            <stop offset="100%" stop-color="#8b5cf6" />
+          </linearGradient>
+          <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f43f5e" />
+            <stop offset="50%" stop-color="#ec4899" />
+            <stop offset="100%" stop-color="#3b82f6" />
+          </linearGradient>
+        </defs>
+        <rect x="50" y="20" width="400" height="160" rx="30" fill="url(#illGrad)" fill-opacity="0.08" stroke="url(#illGrad)" stroke-width="2" stroke-dasharray="8 4" />
+        <path d="M 80 100 L 160 100 L 180 60 L 200 140 L 220 80 L 240 120 L 260 100 L 420 100" stroke="url(#lineGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+        
+        <g transform="translate(90, 35)">
+          <rect width="90" height="36" rx="10" fill="#ffffff" class="dark:fill-slate-800" stroke="#f472b6" stroke-width="1.5" />
+          <text x="45" y="23" text-anchor="middle" fill="#ec4899" font-size="12" font-weight="bold">🔥 2,150 kcal</text>
+        </g>
+        
+        <g transform="translate(320, 125)">
+          <rect width="95" height="36" rx="10" fill="#ffffff" class="dark:fill-slate-800" stroke="#8b5cf6" stroke-width="1.5" />
+          <text x="47" y="23" text-anchor="middle" fill="#8b5cf6" font-size="12" font-weight="bold">🥑 160g Protein</text>
+        </g>
+
+        <circle cx="250" cy="100" r="22" fill="url(#illGrad)" />
+        <path d="M 250 88 L 250 112 M 238 100 L 262 100" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+      </svg>
+    </div>
+
+    <h1 class="text-4xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-white mb-4 leading-tight">
+      Ultimate Fitness & <br class="hidden md:inline"><span class="gradient-text">Health Visualizer.</span>
+    </h1>
+    
+    <p class="text-slate-600 dark:text-slate-300 text-sm md:text-lg max-w-3xl mx-auto font-medium leading-relaxed mb-6">
+      Access 10 enterprise-grade health calculators engineered for precision. Instantly map out your TDEE, Macronutrient splits, Body Fat metrics, and recovery cycles with interactive visual charts.
+    </p>
+
+    <!-- Visual Mini Stats Cards Bar -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-4">
+      <div class="stat-badge p-4 rounded-2xl text-center shadow-sm">
+        <div class="text-2xl font-black text-pink-600 dark:text-pink-400">10 Pro</div>
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Calculators</div>
+      </div>
+      <div class="stat-badge p-4 rounded-2xl text-center shadow-sm">
+        <div class="text-2xl font-black text-purple-600 dark:text-purple-400">Chart.js</div>
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Live Visuals</div>
+      </div>
+      <div class="stat-badge p-4 rounded-2xl text-center shadow-sm">
+        <div class="text-2xl font-black text-blue-600 dark:text-blue-400">100%</div>
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Client-Side Privacy</div>
+      </div>
+      <div class="stat-badge p-4 rounded-2xl text-center shadow-sm">
+        <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400">PDF Ready</div>
+        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Export Reports</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCULATOR APP CONTAINER -->
+  <main class="max-w-7xl mx-auto px-6 py-6 flex-1 w-full space-y-8" id="printArea">
+
+    <!-- 10 TABS NAVIGATION -->
+    <div class="flex justify-start md:justify-center mb-8 overflow-x-auto py-3 no-print custom-scrollbar">
+      <div class="bg-slate-200/70 dark:bg-slate-800 p-2 rounded-2xl flex gap-2 border border-slate-300/50 dark:border-slate-700/50 shadow-inner">
+        <button onclick="switchTab('tdee')" id="tabBtnTdee" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-md whitespace-nowrap">🔥 TDEE</button>
+        <button onclick="switchTab('macro')" id="tabBtnMacro" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">🥑 Macros</button>
+        <button onclick="switchTab('bmi')" id="tabBtnBmi" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">⚖️ BMI</button>
+        <button onclick="switchTab('bodyfat')" id="tabBtnBodyfat" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">📉 Body Fat</button>
+        <button onclick="switchTab('bmr')" id="tabBtnBmr" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">🧬 BMR</button>
+        <button onclick="switchTab('water')" id="tabBtnWater" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">💧 Hydration</button>
+        <button onclick="switchTab('heart')" id="tabBtnHeart" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">❤️ Heart Rate</button>
+        <button onclick="switchTab('preg')" id="tabBtnPreg" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">👶 Pregnancy</button>
+        <button onclick="switchTab('ovul')" id="tabBtnOvul" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">🌸 Ovulation</button>
+        <button onclick="switchTab('sleep')" id="tabBtnSleep" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">🌙 Sleep Cycle</button>
+      </div>
+    </div>
+
+    <!-- 2-COLUMN GRID (INPUTS LEFT, CHART RIGHT) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+      
+      <!-- LEFT COLUMN: FORMS -->
+      <div class="lg:col-span-5 space-y-6 no-print">
+        
+        <!-- 1. TDEE -->
+        <div id="tabContentTdee" class="pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">TDEE Estimator</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Total Daily Energy Expenditure (Mifflin-St Jeor)</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Gender:</label>
+              <select id="tdeeGender" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-pink-500 transition">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Age:</label>
+              <input type="number" id="tdeeAge" value="30" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-pink-500 transition">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Weight (lbs):</label>
+              <input type="number" id="tdeeWeight" value="160" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-pink-500 transition">
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Height (inches):</label>
+              <input type="number" id="tdeeHeight" value="68" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-pink-500 transition">
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Activity Level:</label>
+            <select id="tdeeActivity" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-pink-500 transition">
+              <option value="1.2">Sedentary (Office job)</option>
+              <option value="1.375" selected>Light Exercise (1-2 days/week)</option>
+              <option value="1.55">Moderate Exercise (3-5 days/week)</option>
+              <option value="1.725">Heavy Exercise (6-7 days/week)</option>
+              <option value="1.9">Athlete (2x per day)</option>
+            </select>
+          </div>
+          <button onclick="calculateTDEE()" class="w-full mt-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Calculate TDEE 🔥
+          </button>
+        </div>
+
+        <!-- 2. MACROS -->
+        <div id="tabContentMacro" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">Macro Nutrient Split</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Determine daily grams of protein, fats, and carbs.</p>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Your Daily Calories (TDEE Goal):</label>
+            <input type="number" id="macCals" value="2000" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-purple-500 transition">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Diet Plan:</label>
+            <select id="macDiet" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-purple-500 transition">
+              <option value="balance" selected>Balanced (30% P, 35% F, 35% C)</option>
+              <option value="lowcarb">Low Carb / Keto (35% P, 55% F, 10% C)</option>
+              <option value="highpro">High Protein / Builder (40% P, 30% F, 30% C)</option>
+            </select>
+          </div>
+          <button onclick="calculateMacros()" class="w-full mt-2 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Visualize Macros 🥑
+          </button>
+        </div>
+
+        <!-- 3. BMI -->
+        <div id="tabContentBmi" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">BMI Calculator</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Body Mass Index (US Standard).</p>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Weight (lbs):</label>
+            <input type="number" id="bmiWeight" value="160" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Height (inches):</label>
+            <input type="number" id="bmiHeight" value="68" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-blue-500 transition">
+          </div>
+          <button onclick="calculateBMI()" class="w-full mt-2 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Calculate BMI ⚖️
+          </button>
+        </div>
+
+        <!-- 4. BODY FAT -->
+        <div id="tabContentBodyfat" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">Body Fat % (US Navy)</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Estimate body fat using tape measurements.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Gender:</label>
+              <select id="bfGender" onchange="toggleHipInput()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-emerald-500 transition">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Height (in):</label>
+              <input type="number" id="bfHeight" value="68" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-emerald-500 transition">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Neck (in):</label>
+              <input type="number" id="bfNeck" value="15" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-emerald-500 transition">
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Waist (in):</label>
+              <input type="number" id="bfWaist" value="32" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-emerald-500 transition">
+            </div>
+          </div>
+          <div id="hipContainer" class="hidden">
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Hips (in) - Female Only:</label>
+            <input type="number" id="bfHip" value="38" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-emerald-500 transition">
+          </div>
+          <button onclick="calculateBodyFat()" class="w-full mt-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Estimate Body Fat 📉
+          </button>
+        </div>
+
+        <!-- 5. BMR -->
+        <div id="tabContentBmr" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">BMR Estimator</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Basal Metabolic Rate (Coma calories).</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Gender:</label>
+              <select id="bmrGender" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-gray-500 transition">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Age:</label>
+              <input type="number" id="bmrAge" value="30" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-gray-500 transition">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Weight (lbs):</label>
+              <input type="number" id="bmrWeight" value="160" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-gray-500 transition">
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Height (in):</label>
+              <input type="number" id="bmrHeight" value="68" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-gray-500 transition">
+            </div>
+          </div>
+          <button onclick="calculateBMR()" class="w-full mt-2 bg-gradient-to-r from-gray-600 to-slate-700 hover:from-gray-700 hover:to-slate-800 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Calculate BMR 🧬
+          </button>
+        </div>
+
+        <!-- 6. WATER INTAKE -->
+        <div id="tabContentWater" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">Hydration Calculator</h2>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Body Weight (lbs):</label>
+            <input type="number" id="waterWeight" value="160" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-cyan-500 transition">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Daily Exercise (Minutes):</label>
+            <input type="number" id="waterEx" value="30" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-cyan-500 transition">
+          </div>
+          <button onclick="calculateWater()" class="w-full mt-2 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Calculate Water Need 💧
+          </button>
+        </div>
+
+        <!-- 7. HEART RATE -->
+        <div id="tabContentHeart" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">Target Heart Rate Zones</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Karvonen Formula estimation.</p>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Your Age:</label>
+            <input type="number" id="hrAge" value="30" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-rose-500 transition">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Resting Heart Rate (BPM):</label>
+            <input type="number" id="hrResting" value="65" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-rose-500 transition">
+          </div>
+          <button onclick="calculateHeart()" class="w-full mt-2 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Visualize Heart Zones ❤️
+          </button>
+        </div>
+
+        <!-- 8. PREGNANCY -->
+        <div id="tabContentPreg" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">Pregnancy Due Date</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Based on Last Menstrual Period (LMP).</p>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">First Day of LMP:</label>
+            <input type="date" id="pregLmp" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-pink-400 transition">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Average Cycle Length (Days):</label>
+            <input type="number" id="pregCycle" value="28" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-pink-400 transition">
+          </div>
+          <button onclick="calculatePregnancy()" class="w-full mt-2 bg-gradient-to-r from-pink-400 to-purple-500 hover:from-pink-500 hover:to-purple-600 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Calculate Due Date 👶
+          </button>
+        </div>
+
+        <!-- 9. OVULATION -->
+        <div id="tabContentOvul" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">Ovulation & Fertility Window</h2>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">First Day of Last Period:</label>
+            <input type="date" id="ovulLmp" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-fuchsia-500 transition">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Cycle Length (Days):</label>
+            <input type="number" id="ovulCycle" value="28" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-fuchsia-500 transition">
+          </div>
+          <button onclick="calculateOvulation()" class="w-full mt-2 bg-gradient-to-r from-fuchsia-500 to-pink-600 hover:from-fuchsia-600 hover:to-pink-700 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Find Fertile Window 🌸
+          </button>
+        </div>
+
+        <!-- 10. SLEEP CYCLE -->
+        <div id="tabContentSleep" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">Sleep Cycle Calculator</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Wake up refreshed based on 90-min cycles.</p>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">I want to wake up at:</label>
+            <input type="time" id="sleepWake" value="07:00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 transition">
+          </div>
+          <button onclick="calculateSleep()" class="w-full mt-2 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Calculate Bedtimes 🌙
+          </button>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: VISUALIZATION CHART -->
+      <div class="lg:col-span-7">
+        <div id="resultCard" class="pastel-card p-8 md:p-10 rounded-3xl flex flex-col justify-center items-center h-full min-h-[500px]">
+          <div class="text-center space-y-3 mb-8 w-full border-b border-slate-200 dark:border-slate-700 pb-6">
+            <div id="resultLabel" class="text-sm uppercase tracking-widest font-extrabold text-slate-400 dark:text-slate-500">System Standby</div>
+            <div id="resultTotal" class="text-4xl md:text-5xl font-black text-slate-800 dark:text-white drop-shadow-sm">Awaiting Input</div>
+            <p id="resultSubtext" class="text-xs text-slate-500 dark:text-slate-400 mt-2">Enter your body metrics on the left panel to generate a high-fidelity visual analysis.</p>
+            <button onclick="window.print()" class="no-print mt-6 inline-flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 px-6 py-2.5 rounded-full hover:bg-slate-50 dark:hover:bg-slate-700 transition shadow-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+              Save Health Report
+            </button>
+          </div>
+          
+          <!-- CHART CANVAS -->
+          <div class="w-full flex-1 relative min-h-[300px]">
+            <canvas id="healthChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- INTERACTIVE FAQ SECTION (SEO & UX) -->
+  <section id="faq-section" class="max-w-4xl mx-auto px-6 py-12 no-print">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl md:text-3xl font-black text-slate-800 dark:text-white">Frequently Asked Questions</h2>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Common queries regarding fitness, calories, and macros.</p>
+    </div>
+    <div class="space-y-4">
+      <div class="pastel-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <button class="w-full text-left px-6 py-4 font-bold text-slate-800 dark:text-white flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
+          What is TDEE and why does it matter?
+          <span class="text-pink-500">▼</span>
+        </button>
+        <div class="px-6 pb-4 hidden text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700 pt-3">
+          TDEE stands for Total Daily Energy Expenditure. It is the total number of calories you burn in a day, including basal metabolic rate and physical activity. Knowing your TDEE is essential because to lose weight you must eat fewer calories than your TDEE (caloric deficit), and to gain weight you must eat more.
+        </div>
+      </div>
+      <div class="pastel-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <button class="w-full text-left px-6 py-4 font-bold text-slate-800 dark:text-white flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
+          How are Macros calculated for weight loss?
+          <span class="text-pink-500">▼</span>
+        </button>
+        <div class="px-6 pb-4 hidden text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700 pt-3">
+          Macros (macronutrients) are divided into Protein (4 cal/g), Fat (9 cal/g), and Carbohydrates (4 cal/g). A common weight loss split is 40% protein, 30% fat, and 30% carbs. This ensures high satiety and muscle preservation while dropping body fat.
+        </div>
+      </div>
+      <div class="pastel-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <button class="w-full text-left px-6 py-4 font-bold text-slate-800 dark:text-white flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
+          How accurate is the US Navy Body Fat calculator?
+          <span class="text-pink-500">▼</span>
+        </button>
+        <div class="px-6 pb-4 hidden text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700 pt-3">
+          The US Navy method uses waist, neck, and height measurements (plus hips for women). It is statistically accurate within 3-4% of clinical DEXA scans. It is widely considered the best and easiest at-home estimation tool for tracking fitness progress without expensive equipment.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPANDED SEO ARTICLES KNOWLEDGE BASE -->
+  <section id="seo-section" class="max-w-7xl mx-auto px-6 py-10 no-print">
+    <div class="pastel-card p-8 md:p-12 rounded-3xl space-y-10">
+      <div class="border-b border-slate-200 dark:border-slate-700 pb-6 text-center md:text-left">
+        <span class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-950 px-3 py-1.5 rounded-full border border-pink-100 dark:border-pink-900 mb-3 inline-block">Fitness Knowledge Base</span>
+        <h2 class="text-3xl md:text-4xl font-black text-slate-800 dark:text-white leading-tight">10 Comprehensive Guides to Mastering Body Recomposition</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-3 max-w-3xl">Deep dive into the science of metabolism, macronutrients, cardiovascular health, and reproductive tracking used by fitness professionals across the United States.</p>
+      </div>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-red-500 pl-4">1. The Science of TDEE and Caloric Deficits</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Total Daily Energy Expenditure (TDEE) is the foundational metric of any body transformation. It represents the exact number of calories your body burns in 24 hours. The laws of thermodynamics dictate that to lose body fat, you must consume fewer calories than your TDEE (a caloric deficit). Conversely, to build muscle optimally, you require a slight caloric surplus.</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-purple-500 pl-4">2. Macronutrients: Why Not All Calories Are Equal</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">While total calories dictate weight change, macronutrients (Protein, Fat, Carbohydrates) dictate body composition. Eating 2,000 calories of pure sugar will yield vastly different aesthetic and health results than 2,000 calories of lean meat and vegetables. Protein is highly thermogenic, fats regulate hormones, and carbohydrates fuel training.</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-blue-500 pl-4">3. Understanding BMI (Body Mass Index) Limits</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">BMI is a screening tool used widely in the US healthcare system to categorize individuals based on height and weight. While useful for population-wide statistics, it fails to distinguish between muscle mass and fat mass. Therefore, BMI should always be paired with Body Fat Percentage tracking.</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-emerald-500 pl-4">4. US Navy Body Fat Method vs DEXA Scans</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Measuring body fat accurately at home is notoriously difficult. The US Navy Body Fat equation, which uses circumference measurements of the neck, waist, and hips, is widely considered the most accurate at-home method, staying within 3-4% of clinical DEXA scans.</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-gray-500 pl-4">5. BMR: The Minimum Calories to Survive</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Basal Metabolic Rate (BMR) is the amount of energy expended while at rest. You should never consume fewer calories than your BMR for extended periods to avoid metabolic adaptation, fatigue, and muscle loss.</p>
+      </article>
+      
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-cyan-500 pl-4">6. The Truth About Daily Hydration and Water Intake</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Optimal water intake depends heavily on body weight and exercise. A standard US guideline suggests drinking half your body weight in ounces of water daily as a baseline, plus extra amounts during intense workouts.</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-rose-500 pl-4">7. Target Heart Rate Zones for Optimal Fat Burning</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Cardiovascular training is divided into zones based on Maximum Heart Rate. Zone 2 targets fat oxidation, while Zone 4/5 builds cardiovascular endurance and triggers the post-exercise calorie afterburn effect (EPOC).</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-pink-400 pl-4">8. Calculating Pregnancy Due Dates (Naegele's Rule)</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Standard obstetric practice calculates a pregnancy due date by adding 280 days (40 weeks) to the first day of your Last Menstrual Period (LMP), adjusted for cycle lengths.</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-fuchsia-500 pl-4">9. Ovulation Tracking for Fertility and Conception</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Understanding your fertile window is critical for conception. Ovulation typically occurs 14 days before the start of the next menstrual period, with a 6-day fertile window.</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-indigo-500 pl-4">10. Sleep Cycles: Hacking REM for Maximum Recovery</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Human sleep operates in 90-minute cycles. Waking up in the middle of deep sleep causes grogginess. Calculating bedtimes in 90-minute increments ensures you wake up refreshed at the end of a cycle.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- MATRIX SECTION (12 SITES) -->
+  <section id="matrix-section" class="max-w-7xl mx-auto px-6 pb-12 no-print">
+    <div class="pastel-card p-8 md:p-12 rounded-3xl space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-4">
+        <span class="w-3 h-3 rounded-full bg-pink-600 animate-ping"></span>
+        <h2 class="text-2xl font-black text-slate-800 dark:text-white">The Omni Suite: 12 Enterprise Calculators</h2>
+      </div>
+      <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
+        Maximize your personal finance, health, tax, and legal strategy with our interconnected ecosystem of high-performance tools built for the US market:
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
+        <a href="https://omni-fit.vercel.app/" target="_blank" rel="noopener" class="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-pink-300 dark:border-pink-700/50 hover:border-pink-500 transition group block shadow-sm ring-1 ring-pink-500/20">
+          <div class="text-sm font-extrabold text-slate-800 dark:text-white group-hover:text-pink-600 transition">🩺 OmniFit (Here)</div>
+          <div class="text-[11px] text-slate-500 mt-1.5 leading-tight">US Health, TDEE, Macros & Fitness.</div>
+        </a>
+        <a href="https://omni-retire.vercel.app/" target="_blank" rel="noopener" class="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition group block shadow-sm">
+          <div class="text-sm font-extrabold text-slate-800 dark:text-white group-hover:text-emerald-600 transition">🌴 OmniRetire</div>
+          <div class="text-[11px] text-slate-500 mt-1.5 leading-tight">US 401(k), IRA, FIRE, and Social Security.</div>
+        </a>
+        <a href="https://omni-loan.vercel.app/" target="_blank" rel="noopener" class="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition group block shadow-sm">
+          <div class="text-sm font-extrabold text-slate-800 dark:text-white group-hover:text-emerald-600 transition">🎓 OmniLoan</div>
+          <div class="text-[11px] text-slate-500 mt-1.5 leading-tight">US student loan refinancing and repayment.</div>
+        </a>
+        <a href="https://omnitax-three.vercel.app/" target="_blank" rel="noopener" class="p-5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition group block shadow-sm">
+          <div class="text-sm font-extrabold text-slate-800 dark:text-white group-hover:text-emerald-600 transition">📋 OmniTax</div>
+          <div class="text-[11px] text-slate-500 mt-1.5 leading-tight">US Federal income tax, refund, & 1099.</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTERPRISE MEGA FOOTER -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 py-12 text-sm text-slate-500 font-medium">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="space-y-4">
+        <h4 class="font-black text-lg text-slate-800 dark:text-white">Omni<span class="text-pink-600">Fit</span></h4>
+        <p class="text-xs leading-relaxed">Providing high-fidelity, private, and instantaneous health metric estimations for the modern US population. Chart your path to optimal fitness today.</p>
+      </div>
+      <div class="space-y-3">
+        <h4 class="font-bold text-slate-800 dark:text-white">Top Tools</h4>
+        <ul class="space-y-2 text-xs">
+          <li><button onclick="switchTab('tdee'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">TDEE Calculator</button></li>
+          <li><button onclick="switchTab('macro'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">Macro Diet Split</button></li>
+          <li><button onclick="switchTab('bodyfat'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">US Navy Body Fat %</button></li>
+          <li><button onclick="switchTab('preg'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">Pregnancy Due Date</button></li>
+        </ul>
+      </div>
+      <div class="space-y-3">
+        <h4 class="font-bold text-slate-800 dark:text-white">Resources</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="#seo-section" class="hover:text-pink-600 transition">Fitness Guides</a></li>
+          <li><a href="#faq-section" class="hover:text-pink-600 transition">Frequently Asked Questions</a></li>
+          <li><a href="#matrix-section" class="hover:text-pink-600 transition">Omni Ecosystem</a></li>
+        </ul>
+      </div>
+      <div class="space-y-3">
+        <h4 class="font-bold text-slate-800 dark:text-white">Legal</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="privacy.html" class="hover:text-pink-600 transition">Privacy Policy</a></li>
+          <li><a href="terms.html" class="hover:text-pink-600 transition">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-6 border-t border-slate-200 dark:border-slate-800 mt-10 pt-6 text-center text-xs">
+      <p>© 2026 OmniFit Enterprise Suite. All calculations run locally on your device. Not official medical counsel. Consult a physician before starting any diet or exercise program.</p>
+    </div>
+  </footer>
+
+  <!-- ADVANCED JAVASCRIPT SYSTEM -->
+  <script>
+    let myChart = null;
+    const tabList = ['tdee', 'macro', 'bmi', 'bodyfat', 'bmr', 'water', 'heart', 'preg', 'ovul', 'sleep'];
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      document.getElementById('themeIcon').innerText = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+    }
+
+    function toggleHipInput() {
+      const gender = document.getElementById('bfGender').value;
+      const hipDiv = document.getElementById('hipContainer');
+      if(gender === 'female') {
+        hipDiv.classList.remove('hidden');
+      } else {
+        hipDiv.classList.add('hidden');
+      }
+    }
+
+    function switchTab(tab) {
+      tabList.forEach(t => {
+        const btn = document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
+        const content = document.getElementById('tabContent' + t.charAt(0).toUpperCase() + t.slice(1));
+        if(t === tab) {
+          btn.className = "px-5 py-2.5 rounded-xl text-xs font-extrabold transition bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-md whitespace-nowrap";
+          content.classList.remove('hidden');
+        } else {
+          btn.className = "px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap";
+          content.classList.add('hidden');
+        }
+      });
+      document.getElementById('resultLabel').innerText = "System Standby";
+      document.getElementById('resultTotal').innerText = "Awaiting Input";
+      document.getElementById('resultSubtext').innerText = "Enter your body metrics to render the analysis.";
+      if(myChart) myChart.destroy();
+    }
+
+    function drawChart(type, labels, dataArray, colors, labelName) {
+      if (myChart) myChart.destroy();
+      const ctx = document.getElementById('healthChart').getContext('2d');
+      document.getElementById('resultSubtext').innerText = "Visual rendering complete. Hover over chart for exact values.";
+      
+      const isDark = document.documentElement.classList.contains('dark');
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+      const textColor = isDark ? '#94a3b8' : '#64748b';
+
+      let bgColors = Array.isArray(colors) ? colors : colors + '33';
+      let borderColors = Array.isArray(colors) ? colors.map(c => c.replace('0.7', '1')) : colors;
+
+      myChart = new Chart(ctx, {
+        type: type,
+        data: {
+          labels: labels,
+          datasets: [{
+            label: labelName,
+            data: dataArray,
+            borderColor: borderColors,
+            backgroundColor: bgColors,
+            borderWidth: 2,
+            borderRadius: type === 'bar' ? 4 : 0,
+            fill: type === 'line'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { 
+            legend: { 
+              display: type === 'pie' || type === 'doughnut',
+              position: 'bottom',
+              labels: { color: textColor }
+            }
+          },
+          scales: (type === 'pie' || type === 'doughnut') ? {} : {
+            x: { grid: { display: false }, ticks: { color: textColor } },
+            y: { grid: { color: gridColor }, beginAtZero: true, ticks: { color: textColor } }
+          }
+        }
+      });
+    }
+
+    function calculateTDEE() {
+      let gender = document.getElementById('tdeeGender').value;
+      let age = parseFloat(document.getElementById('tdeeAge').value) || 0;
+      let weightLbs = parseFloat(document.getElementById('tdeeWeight').value) || 0;
+      let heightIn = parseFloat(document.getElementById('tdeeHeight').value) || 0;
+      let act = parseFloat(document.getElementById('tdeeActivity').value) || 1.2;
+      
+      let wKg = weightLbs * 0.453592;
+      let hCm = heightIn * 2.54;
+      let bmr = (10 * wKg) + (6.25 * hCm) - (5 * age);
+      bmr = gender === 'male' ? bmr + 5 : bmr - 161;
+      let tdee = bmr * act;
+      
+      document.getElementById('resultLabel').innerText = 'Maintenance Calories (TDEE)';
+      document.getElementById('resultTotal').innerText = Math.round(tdee).toLocaleString() + ' kcal';
+      drawChart('bar', ['BMR (Resting)', 'TDEE (Active)', 'Cutting (-500)', 'Bulking (+500)'], [bmr, tdee, tdee - 500, tdee + 500], '#f97316', 'Calories');
+    }
+
+    function calculateMacros() {
+      let cals = parseFloat(document.getElementById('macCals').value) || 2000;
+      let plan = document.getElementById('macDiet').value;
+      let pRatio = plan === 'lowcarb' ? 0.35 : plan === 'highpro' ? 0.40 : 0.30;
+      let fRatio = plan === 'lowcarb' ? 0.55 : plan === 'highpro' ? 0.30 : 0.35;
+      let cRatio = plan === 'lowcarb' ? 0.10 : plan === 'highpro' ? 0.30 : 0.35;
+
+      let pGrams = (cals * pRatio) / 4;
+      let fGrams = (cals * fRatio) / 9;
+      let cGrams = (cals * cRatio) / 4;
+
+      document.getElementById('resultLabel').innerText = 'Daily Macro Target';
+      document.getElementById('resultTotal').innerText = Math.round(pGrams)+'g P / '+Math.round(fGrams)+'g F / '+Math.round(cGrams)+'g C';
+      drawChart('doughnut', ['Protein (g)', 'Fats (g)', 'Carbs (g)'], [pGrams, fGrams, cGrams], ['rgba(168, 85, 247, 0.7)', 'rgba(234, 179, 8, 0.7)', 'rgba(59, 130, 246, 0.7)'], 'Macros');
+    }
+
+    function calculateBMI() {
+      let w = parseFloat(document.getElementById('bmiWeight').value) || 0;
+      let h = parseFloat(document.getElementById('bmiHeight').value) || 1;
+      let bmi = (w / (h * h)) * 703;
+      let cat = "Normal Weight";
+      if(bmi < 18.5) cat = "Underweight";
+      else if (bmi >= 25 && bmi < 30) cat = "Overweight";
+      else if (bmi >= 30) cat = "Obese";
+
+      document.getElementById('resultLabel').innerText = 'BMI Category: ' + cat;
+      document.getElementById('resultTotal').innerText = bmi.toFixed(1);
+      drawChart('bar', ['Your BMI', 'Normal Range Max', 'Overweight Max'], [bmi, 24.9, 29.9], '#3b82f6', 'BMI Score');
+    }
+
+    function calculateBodyFat() {
+      let g = document.getElementById('bfGender').value;
+      let h = parseFloat(document.getElementById('bfHeight').value) || 0;
+      let n = parseFloat(document.getElementById('bfNeck').value) || 0;
+      let w = parseFloat(document.getElementById('bfWaist').value) || 0;
+      let hip = parseFloat(document.getElementById('bfHip').value) || 0;
+      let bf = 0;
+      if (g === 'male') {
+        bf = 86.010 * Math.log10(w - n) - 70.041 * Math.log10(h) + 36.76;
+      } else {
+        bf = 163.205 * Math.log10(w + hip - n) - 97.684 * Math.log10(h) - 78.387;
+      }
+      bf = Math.max(1, Math.min(60, bf));
+
+      document.getElementById('resultLabel').innerText = 'Estimated Body Fat';
+      document.getElementById('resultTotal').innerText = bf.toFixed(1) + '%';
+      drawChart('bar', ['Your Body Fat %', 'Athletic Benchmark', 'Average Benchmark'], [bf, g==='male'?12:20, g==='male'?20:28], '#10b981', 'Body Fat %');
+    }
+
+    function calculateBMR() {
+      let gender = document.getElementById('bmrGender').value;
+      let age = parseFloat(document.getElementById('bmrAge').value) || 0;
+      let wLbs = parseFloat(document.getElementById('bmrWeight').value) || 0;
+      let hIn = parseFloat(document.getElementById('bmrHeight').value) || 0;
+      let wKg = wLbs * 0.453592;
+      let hCm = hIn * 2.54;
+      let bmr = (10 * wKg) + (6.25 * hCm) - (5 * age);
+      bmr = gender === 'male' ? bmr + 5 : bmr - 161;
+      
+      document.getElementById('resultLabel').innerText = 'Basal Metabolic Rate';
+      document.getElementById('resultTotal').innerText = Math.round(bmr).toLocaleString() + ' kcal';
+      drawChart('bar', ['Your BMR', 'Avg Adult BMR'], [bmr, 1600], '#475569', 'Calories');
+    }
+
+    function calculateWater() {
+      let w = parseFloat(document.getElementById('waterWeight').value) || 0;
+      let ex = parseFloat(document.getElementById('waterEx').value) || 0;
+      let oz = (w / 2) + ((ex / 30) * 12);
+      
+      document.getElementById('resultLabel').innerText = 'Daily Water Target';
+      document.getElementById('resultTotal').innerText = Math.round(oz) + ' oz';
+      drawChart('bar', ['Base Hydration', 'Exercise Bonus', 'Total Target'], [w/2, (ex/30)*12, oz], '#06b6d4', 'Ounces');
+    }
+
+    function calculateHeart() {
+      let age = parseFloat(document.getElementById('hrAge').value) || 30;
+      let rest = parseFloat(document.getElementById('hrResting').value) || 65;
+      let maxHr = 220 - age;
+      let reserve = maxHr - rest;
+      let z2 = rest + (reserve * 0.6);
+      let z4 = rest + (reserve * 0.8);
+      
+      document.getElementById('resultLabel').innerText = 'Max Heart Rate (BPM)';
+      document.getElementById('resultTotal').innerText = maxHr + ' BPM';
+      drawChart('bar', ['Resting', 'Zone 2 (Fat Burn)', 'Zone 4 (Cardio)', 'Maximum'], [rest, z2, z4, maxHr], '#e11d48', 'Beats Per Minute');
+    }
+
+    function calculatePregnancy() {
+      let lmpDate = document.getElementById('pregLmp').value;
+      let cycle = parseFloat(document.getElementById('pregCycle').value) || 28;
+      if(!lmpDate) return;
+      let date = new Date(lmpDate);
+      date.setDate(date.getDate() + 280 + (cycle - 28));
+      
+      document.getElementById('resultLabel').innerText = 'Estimated Due Date';
+      document.getElementById('resultTotal').innerText = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      drawChart('pie', ['Trimester 1', 'Trimester 2', 'Trimester 3'], [13, 13, 14], ['rgba(244, 114, 182, 0.7)', 'rgba(192, 132, 252, 0.7)', 'rgba(96, 165, 250, 0.7)'], 'Weeks');
+    }
+
+    function calculateOvulation() {
+      let lmpDate = document.getElementById('ovulLmp').value;
+      let cycle = parseFloat(document.getElementById('ovulCycle').value) || 28;
+      if(!lmpDate) return;
+      let date = new Date(lmpDate);
+      let daysToOvul = cycle - 14;
+      date.setDate(date.getDate() + daysToOvul);
+      
+      document.getElementById('resultLabel').innerText = 'Peak Ovulation Day';
+      document.getElementById('resultTotal').innerText = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      drawChart('bar', ['Pre-Fertile', 'Fertile Window (5 Days)', 'Ovulation Day'], [daysToOvul-5, 5, 1], '#d946ef', 'Days');
+    }
+
+    function calculateSleep() {
+      let wakeTime = document.getElementById('sleepWake').value;
+      if(!wakeTime) return;
+      let timeParts = wakeTime.split(':');
+      let wake = new Date();
+      wake.setHours(timeParts[0], timeParts[1], 0);
+      let c5 = new Date(wake.getTime() - (5 * 5400000) - 900000);
+      
+      document.getElementById('resultLabel').innerText = 'Optimal Bedtime (5 Cycles)';
+      document.getElementById('resultTotal').innerText = c5.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+      drawChart('bar', ['4 Cycles (6 Hrs)', '5 Cycles (7.5 Hrs)', '6 Cycles (9 Hrs)'], [6, 7.5, 9], '#6366f1', 'Hours of Sleep');
+    }
+  </script>
+</body>
+</html>
