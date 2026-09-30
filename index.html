@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OmniFit - 2026 US Health, TDEE, Macro & Fitness Calculator Suite</title>
-  <meta name="description" content="100% free US health calculator suite. Estimate your TDEE, Macros, BMI, Body Fat, BMR, Pregnancy Due Date, and optimal Sleep Cycles instantly.">
-  <meta name="keywords" content="tdee calculator, macro calculator for weight loss, body fat calculator, us navy body fat, bmi calculator, pregnancy due date calculator, sleep cycle calculator">
+  <meta name="description" content="100% free US health calculator suite. Estimate your TDEE, Macros, BMI, Body Fat, BMR, Intermittent Fasting windows, and optimal Sleep Cycles instantly.">
+  <meta name="keywords" content="tdee calculator, macro calculator for weight loss, body fat calculator, us navy body fat, bmi calculator, intermittent fasting calculator, sleep cycle calculator">
   <meta name="author" content="OmniFit Enterprise">
   <link rel="canonical" href="https://omni-fit.vercel.app/">
   <meta name="google-site-verification" content="google45274bc7d9133ca5" />
 
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="OmniFit - 2026 Ultimate Health & Fitness Calculator">
-  <meta property="og:description" content="Access 10 advanced health calculation tools with visual charts for optimal fitness tracking.">
+  <meta property="og:description" content="Access 11 advanced health calculation tools with visual charts for optimal fitness tracking.">
   <meta property="og:url" content="https://omni-fit.vercel.app/">
   <meta property="og:type" content="website">
 
@@ -25,7 +25,7 @@
         "@type": "WebApplication",
         "name": "OmniFit Suite",
         "url": "https://omni-fit.vercel.app/",
-        "description": "Comprehensive suite of 10 US health and fitness calculators.",
+        "description": "Comprehensive suite of 11 US health and fitness calculators.",
         "applicationCategory": "HealthApplication",
         "operatingSystem": "All"
       },
@@ -42,10 +42,10 @@
           },
           {
             "@type": "Question",
-            "name": "How are Macros calculated for weight loss?",
+            "name": "How does Intermittent Fasting aid weight loss?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Macros (macronutrients) are divided into Protein, Fat, and Carbohydrates. A common weight loss split is 40% protein, 30% fat, and 30% carbs, based on a caloric deficit (eating fewer calories than your TDEE)."
+              "text": "Intermittent fasting restricts eating to specific time windows, lowering insulin levels and naturally creating a caloric deficit by reducing the overall duration available for food consumption."
             }
           },
           {
@@ -130,7 +130,7 @@
       </a>
       <div class="flex items-center gap-4">
         <span class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-pink-50 dark:bg-pink-950 text-pink-600 dark:text-pink-400 border border-pink-100 dark:border-pink-900">
-          <span class="w-2 h-2 rounded-full bg-pink-600 animate-pulse"></span> 10 Pro Health Tools Active
+          <span class="w-2 h-2 rounded-full bg-pink-600 animate-pulse"></span> 11 Pro Health Tools Active
         </span>
         <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Toggle Dark Mode">
           <span id="themeIcon">🌙</span>
@@ -184,13 +184,13 @@
     </h1>
     
     <p class="text-slate-600 dark:text-slate-300 text-sm md:text-lg max-w-3xl mx-auto font-medium leading-relaxed mb-6">
-      Access 10 enterprise-grade health calculators engineered for precision. Instantly map out your TDEE, Macronutrient splits, Body Fat metrics, and recovery cycles with interactive visual charts.
+      Access 11 enterprise-grade health calculators engineered for precision. Instantly map out your TDEE, Macronutrient splits, Body Fat metrics, fasting schedules, and recovery cycles with interactive visual charts.
     </p>
 
     <!-- Visual Mini Stats Cards Bar -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-4">
       <div class="stat-badge p-4 rounded-2xl text-center shadow-sm">
-        <div class="text-2xl font-black text-pink-600 dark:text-pink-400">10 Pro</div>
+        <div class="text-2xl font-black text-pink-600 dark:text-pink-400">11 Pro</div>
         <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Calculators</div>
       </div>
       <div class="stat-badge p-4 rounded-2xl text-center shadow-sm">
@@ -211,7 +211,7 @@
   <!-- CALCULATOR APP CONTAINER -->
   <main class="max-w-7xl mx-auto px-6 py-6 flex-1 w-full space-y-8" id="printArea">
 
-    <!-- 10 TABS NAVIGATION -->
+    <!-- 11 TABS NAVIGATION -->
     <div class="flex justify-start md:justify-center mb-8 overflow-x-auto py-3 no-print custom-scrollbar">
       <div class="bg-slate-200/70 dark:bg-slate-800 p-2 rounded-2xl flex gap-2 border border-slate-300/50 dark:border-slate-700/50 shadow-inner">
         <button onclick="switchTab('tdee')" id="tabBtnTdee" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-md whitespace-nowrap">🔥 TDEE</button>
@@ -221,6 +221,7 @@
         <button onclick="switchTab('bmr')" id="tabBtnBmr" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">🧬 BMR</button>
         <button onclick="switchTab('water')" id="tabBtnWater" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">💧 Hydration</button>
         <button onclick="switchTab('heart')" id="tabBtnHeart" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">❤️ Heart Rate</button>
+        <button onclick="switchTab('fasting')" id="tabBtnFasting" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">⏱️ Fasting</button>
         <button onclick="switchTab('preg')" id="tabBtnPreg" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">👶 Pregnancy</button>
         <button onclick="switchTab('ovul')" id="tabBtnOvul" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">🌸 Ovulation</button>
         <button onclick="switchTab('sleep')" id="tabBtnSleep" class="px-5 py-2.5 rounded-xl text-xs font-extrabold transition text-slate-600 dark:text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap">🌙 Sleep Cycle</button>
@@ -428,7 +429,30 @@
           </button>
         </div>
 
-        <!-- 8. PREGNANCY -->
+        <!-- 8. INTERMITTENT FASTING (NEW FEATURE) -->
+        <div id="tabContentFasting" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
+          <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h2 class="text-xl font-black text-slate-800 dark:text-white">Intermittent Fasting Window</h2>
+            <p class="text-[11px] text-slate-500 mt-1">Calculate fasting vs eating schedules.</p>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">Fasting Protocol:</label>
+            <select id="fastProtocol" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-amber-500 transition">
+              <option value="16:9">16:8 (16 Hours Fast / 8 Hours Eat)</option>
+              <option value="18:6">18:6 (18 Hours Fast / 6 Hours Eat)</option>
+              <option value="20:4">20:4 (Warrior / 20 Hours Fast)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1.5">First Meal (Break Fast Time):</label>
+            <input type="time" id="fastMealTime" value="12:00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3.5 text-sm font-semibold focus:ring-2 focus:ring-amber-500 transition">
+          </div>
+          <button onclick="calculateFasting()" class="w-full mt-2 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-extrabold py-4 rounded-xl text-sm transition shadow-lg transform hover:-translate-y-0.5">
+            Calculate Schedule ⏱️
+          </button>
+        </div>
+
+        <!-- 9. PREGNANCY -->
         <div id="tabContentPreg" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
           <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
             <h2 class="text-xl font-black text-slate-800 dark:text-white">Pregnancy Due Date</h2>
@@ -447,7 +471,7 @@
           </button>
         </div>
 
-        <!-- 9. OVULATION -->
+        <!-- 10. OVULATION -->
         <div id="tabContentOvul" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
           <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
             <h2 class="text-xl font-black text-slate-800 dark:text-white">Ovulation & Fertility Window</h2>
@@ -465,7 +489,7 @@
           </button>
         </div>
 
-        <!-- 10. SLEEP CYCLE -->
+        <!-- 11. SLEEP CYCLE -->
         <div id="tabContentSleep" class="hidden pastel-card p-6 md:p-8 rounded-3xl space-y-5">
           <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
             <h2 class="text-xl font-black text-slate-800 dark:text-white">Sleep Cycle Calculator</h2>
@@ -523,11 +547,11 @@
       </div>
       <div class="pastel-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
         <button class="w-full text-left px-6 py-4 font-bold text-slate-800 dark:text-white flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-          How are Macros calculated for weight loss?
+          How does Intermittent Fasting aid weight loss?
           <span class="text-pink-500">▼</span>
         </button>
         <div class="px-6 pb-4 hidden text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700 pt-3">
-          Macros (macronutrients) are divided into Protein (4 cal/g), Fat (9 cal/g), and Carbohydrates (4 cal/g). A common weight loss split is 40% protein, 30% fat, and 30% carbs. This ensures high satiety and muscle preservation while dropping body fat.
+          Intermittent fasting restricts eating to specific time windows, lowering insulin levels and naturally creating a caloric deficit by reducing the overall duration available for food consumption.
         </div>
       </div>
       <div class="pastel-card rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
@@ -542,13 +566,13 @@
     </div>
   </section>
 
-  <!-- EXPANDED SEO ARTICLES KNOWLEDGE BASE -->
+  <!-- EXPANDED SEO ARTICLES KNOWLEDGE BASE (UPDATED WITH 11TH GUIDE) -->
   <section id="seo-section" class="max-w-7xl mx-auto px-6 py-10 no-print">
     <div class="pastel-card p-8 md:p-12 rounded-3xl space-y-10">
       <div class="border-b border-slate-200 dark:border-slate-700 pb-6 text-center md:text-left">
         <span class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-950 px-3 py-1.5 rounded-full border border-pink-100 dark:border-pink-900 mb-3 inline-block">Fitness Knowledge Base</span>
-        <h2 class="text-3xl md:text-4xl font-black text-slate-800 dark:text-white leading-tight">10 Comprehensive Guides to Mastering Body Recomposition</h2>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-3 max-w-3xl">Deep dive into the science of metabolism, macronutrients, cardiovascular health, and reproductive tracking used by fitness professionals across the United States.</p>
+        <h2 class="text-3xl md:text-4xl font-black text-slate-800 dark:text-white leading-tight">11 Comprehensive Guides to Mastering Body Recomposition</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-3 max-w-3xl">Deep dive into the science of metabolism, macronutrients, fasting protocols, and recovery used by fitness professionals across the United States.</p>
       </div>
 
       <article class="space-y-4">
@@ -587,17 +611,22 @@
       </article>
 
       <article class="space-y-4">
-        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-pink-400 pl-4">8. Calculating Pregnancy Due Dates (Naegele's Rule)</h3>
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-amber-500 pl-4">8. Intermittent Fasting Windows: Optimizing Cellular Autophagy</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Intermittent fasting frameworks like 16:8 or 18:6 do more than just restrict calories. By extending the fasting window, insulin levels drop significantly, allowing the body to mobilize fat stores more efficiently and trigger cellular repair mechanisms (autophagy).</p>
+      </article>
+
+      <article class="space-y-4">
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-pink-400 pl-4">9. Calculating Pregnancy Due Dates (Naegele's Rule)</h3>
         <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Standard obstetric practice calculates a pregnancy due date by adding 280 days (40 weeks) to the first day of your Last Menstrual Period (LMP), adjusted for cycle lengths.</p>
       </article>
 
       <article class="space-y-4">
-        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-fuchsia-500 pl-4">9. Ovulation Tracking for Fertility and Conception</h3>
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-fuchsia-500 pl-4">10. Ovulation Tracking for Fertility and Conception</h3>
         <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Understanding your fertile window is critical for conception. Ovulation typically occurs 14 days before the start of the next menstrual period, with a 6-day fertile window.</p>
       </article>
 
       <article class="space-y-4">
-        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-indigo-500 pl-4">10. Sleep Cycles: Hacking REM for Maximum Recovery</h3>
+        <h3 class="text-xl font-extrabold text-slate-800 dark:text-white border-l-4 border-indigo-500 pl-4">11. Sleep Cycles: Hacking REM for Maximum Recovery</h3>
         <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">Human sleep operates in 90-minute cycles. Waking up in the middle of deep sleep causes grogginess. Calculating bedtimes in 90-minute increments ensures you wake up refreshed at the end of a cycle.</p>
       </article>
     </div>
@@ -647,13 +676,13 @@
           <li><button onclick="switchTab('tdee'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">TDEE Calculator</button></li>
           <li><button onclick="switchTab('macro'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">Macro Diet Split</button></li>
           <li><button onclick="switchTab('bodyfat'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">US Navy Body Fat %</button></li>
-          <li><button onclick="switchTab('preg'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">Pregnancy Due Date</button></li>
+          <li><button onclick="switchTab('fasting'); window.scrollTo(0,0);" class="hover:text-pink-600 transition">Intermittent Fasting</button></li>
         </ul>
       </div>
       <div class="space-y-3">
         <h4 class="font-bold text-slate-800 dark:text-white">Resources</h4>
         <ul class="space-y-2 text-xs">
-          <li><a href="#seo-section" class="hover:text-pink-600 transition">Fitness Guides</a></li>
+          <li><a href="#seo-section" class="hover:text-pink-600 transition">Fitness Guides (11 Articles)</a></li>
           <li><a href="#faq-section" class="hover:text-pink-600 transition">Frequently Asked Questions</a></li>
           <li><a href="#matrix-section" class="hover:text-pink-600 transition">Omni Ecosystem</a></li>
         </ul>
@@ -674,7 +703,7 @@
   <!-- ADVANCED JAVASCRIPT SYSTEM -->
   <script>
     let myChart = null;
-    const tabList = ['tdee', 'macro', 'bmi', 'bodyfat', 'bmr', 'water', 'heart', 'preg', 'ovul', 'sleep'];
+    const tabList = ['tdee', 'macro', 'bmi', 'bodyfat', 'bmr', 'water', 'heart', 'fasting', 'preg', 'ovul', 'sleep'];
 
     function toggleDarkMode() {
       document.documentElement.classList.toggle('dark');
@@ -856,6 +885,17 @@
       document.getElementById('resultLabel').innerText = 'Max Heart Rate (BPM)';
       document.getElementById('resultTotal').innerText = maxHr + ' BPM';
       drawChart('bar', ['Resting', 'Zone 2 (Fat Burn)', 'Zone 4 (Cardio)', 'Maximum'], [rest, z2, z4, maxHr], '#e11d48', 'Beats Per Minute');
+    }
+
+    function calculateFasting() {
+      let proto = document.getElementById('fastProtocol').value;
+      let timeStr = document.getElementById('fastMealTime').value || "12:00";
+      let fastingHours = proto === '18:6' ? 18 : proto === '20:4' ? 20 : 16;
+      let eatingHours = 24 - fastingHours;
+
+      document.getElementById('resultLabel').innerText = 'Fasting Protocol (' + proto + ')';
+      document.getElementById('resultTotal').innerText = fastingHours + 'h Fast / ' + eatingHours + 'h Eat';
+      drawChart('bar', ['Fasting Hours', 'Eating Window'], [fastingHours, eatingHours], '#f59e0b', 'Hours');
     }
 
     function calculatePregnancy() {
